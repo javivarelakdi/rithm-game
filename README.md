@@ -24,10 +24,10 @@ Html5 __Canvas__ __DOM manipulation__ and Vanilla __Javascript__
   * Go to start screen button
   Extra for Backlog: Dom Animation for the characters
 ### Game
+* Create Board with 3 instruments 
+* Add accent colors
 * Create Time line
-* Create rithms with 3 instruments, 3 time lines
-* Create interaction with key buttons
-* Create and link sounds for each instrument
+* Add sound interaction with key buttons
 * If fale -> Game Over -> Show Game Over Screen
 * Extra: create characters and animation triggered by key buttons
 * * *
@@ -71,6 +71,11 @@ Game.timeLineMove();
 Game.gameOver();
 Game.init();;
 ````
+__TimeLine.js__
+````
+function TimeLine(options){};
+TimeLine.move();
+````
 __Instrument.js__
 ````
 function Instrument(){
@@ -80,5 +85,5 @@ function Instrument(){
 };
 ````
 ## Links
-[Iron flip run Trello](https://trello.com/b/jvP5IE61/iron-flip-run)
-[Github](https://github.com/annaclf/iron-flip-run)
+[rithm game Trello](https://trello.com/b/rSxjIfLj/rithm-game)
+[Github](https://github.com/javivarelakdi/rithm-game)
