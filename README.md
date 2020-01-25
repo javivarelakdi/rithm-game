@@ -54,20 +54,22 @@ createGameOverScreen(id);
 destroyStartScreen();
 destroyGameScreen();
 destroyGameOverScreen();
-var game = new Game({
-    this.rows,
+var board = new Board({
     this.columns,
     ctx: ctx,
     this.instrument
   });
 game.init();
 ````
-__Game.js__
+__Board.js__
 ````
-function Game(options){};
+function Board(options){
+ this.columns,
+ ctx: ctx,
+ this.instrument
+};
 Game.drawBoard();
 Game.drawAccentPosition();
-Game.timeLineMove();
 Game.gameOver();
 Game.init();;
 ````
