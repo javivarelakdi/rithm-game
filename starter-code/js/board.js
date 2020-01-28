@@ -6,6 +6,8 @@ class Board {
     this.rithm = options.rithm;
     this.timeLine = options.timeLine;
     this.interval = undefined;
+    this.soundsSrc = options.soundsSrc;
+    this.mySounds = {};
   }
 
   _drawBoard() {
@@ -50,26 +52,25 @@ class Board {
     }
   };
   
-  /*_crash(accent){
-    let crash = false;
+  _crash(accentType){
     for (const propt in this.rithm.accents){
-      this.rithm.accents[propt].forEach(function(accentPosition){
-        crash = (propt === accent) && (this.columnWidth * accentPosition === this.timeLine.position)
-          ? true
-          : false;
-      )}
+      this.rithm.accents[propt].forEach(accentPosition => {
+        if ((propt === accentType) && (this.columnWidth * accentPosition === this.timeLine.position)){
+          //this.mySounds[propt].play();
+          //this.mySounds[propt].stop();
+        }
+      });
     }
-    return crash;
-  }*/
+  }
 
   _update(){
     this._clean();
     this._drawBoard()
     this._drawAccents();
     this._drawTimeLine();
-    /*this._crash('high');
+    this._crash('high');
     this._crash('base');
-    this._crash('ctp');*/
+    this._crash('ctp');
     if (!!this.interval) {
       this.interval = window.requestAnimationFrame(this._update.bind(this));
     }
@@ -93,6 +94,9 @@ class Board {
     this._drawBoard();
     this.timeLine._move();
     this.interval = window.requestAnimationFrame(this._update.bind(this));
+    this.mySounds['high'] = this.rithm._sound(this.soundsSrc['high']);
+    this.mySounds['base'] = this.rithm._sound(this.soundsSrc['base']);
+    this.mySounds['ctp'] = this.rithm._sound(this.soundsSrc['ctp']);
     //this._assignControlsToKeys();
   };
 }

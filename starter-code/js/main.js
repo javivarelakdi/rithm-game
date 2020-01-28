@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     rowHeight: canvas.height / maxRows,
     timeLine: new TimeLine(ctx),
     rithm: new Rithm(sambaReagge),
+    soundsSrc :{
+      high:'../sounds/high.wav',
+      base:'../sounds/base.wav',
+      ctp: '../sounds/ctp.wav'
+    }
   }
 
   const board = new Board(options);

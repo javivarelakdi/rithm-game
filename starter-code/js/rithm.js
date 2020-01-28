@@ -4,11 +4,11 @@ class Rithm {
     this.name = rithm.name;
     this.accents = rithm.accents;
     this.colors = rithm.colors;
-    this.sound = document.createElement("audio");
   }
 
   
   _sound(src) {
+    this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
     this.sound.setAttribute("controls", "none");
@@ -19,6 +19,7 @@ class Rithm {
     }
     this.stop = function(){
         this.sound.pause();
-    }    
+    }
+    return this.sound;    
   }
 }
