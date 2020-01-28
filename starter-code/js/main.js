@@ -1,5 +1,6 @@
 let canvas = document.getElementById('rithm')
 const ctx = canvas.getContext('2d');
+const startButton = document.getElementById('start');
 document.addEventListener('DOMContentLoaded', (event) => {
   //the DOM is ready, we can do what we want!
   const maxColumns = 16;
@@ -27,13 +28,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     timeLine: new TimeLine(ctx),
     rithm: new Rithm(sambaReagge),
     soundsSrc :{
-      high:'../sounds/high.wav',
-      base:'../sounds/base.wav',
-      ctp: '../sounds/ctp.wav'
+      high:'/starter-code/sounds/high.wav',
+      base:'/starter-code/sounds/base.wav',
+      ctp: '/starter-code/sounds/ctp.wav'
     }
   }
 
   const board = new Board(options);
-  board.init();
+  startButton.addEventListener('click', board.init.bind(board));
 })
+
 

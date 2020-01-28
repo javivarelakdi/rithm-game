@@ -55,8 +55,9 @@ class Board {
   _crash(accentType){
     for (const propt in this.rithm.accents){
       this.rithm.accents[propt].forEach(accentPosition => {
-        if ((propt === accentType) && (this.columnWidth * accentPosition === this.timeLine.position)){
-          //this.mySounds[propt].play();
+        if (propt === accentType && Math.ceil(this.columnWidth * accentPosition) === this.timeLine.position){
+          console.log(this.timeLine.position)
+          this._startPlayback(propt);
         }
       });
     }
@@ -75,20 +76,29 @@ class Board {
     }
   };
 
-  _startPlayback() {
-    return this.mySounds.high.play();
+  _startPlayback(type) {
+    // const playPromise = this.mySounds[type].play;
+    // if (playPromise !== undefined) {
+    //   playPromise.then(_ => {
+    //     // Automatic playback started!
+    //     // Show playing UI.
+    //     // We can now safely pause video...
+    //     //this.mySounds[type].pause();
+    //   })
+    //   .catch(error => {
+    //     // Auto-play was prevented
+    //     // Show paused UI.
+    //   });
+    // }
+    // this.mySounds[type].play();
+    console.log("beep", type)
   }
   
   _assignControlsToKeys() {
     document.addEventListener('keydown', e => {
       if(e.keyCode === 32){
-        this._startPlayback().then(function() {
-          console.log('The play() Promise fulfilled! Rock on!');
-        }).catch(function(error) {
-          console.log('The play() Promise rejected!');
-          console.log(error);
-        }
-      )};
+        this.mySounds.high.play();
+      }
     });                 
   };
 
