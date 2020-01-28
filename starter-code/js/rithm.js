@@ -7,7 +7,7 @@ class Rithm {
   }
 
   
-  _sound(src) {
+  _createSoundElement(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
