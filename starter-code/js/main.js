@@ -1,6 +1,5 @@
 let canvas = document.getElementById('rithm')
 const ctx = canvas.getContext('2d');
-const startButton = document.getElementById('start');
 document.addEventListener('DOMContentLoaded', (event) => {
   //the DOM is ready, we can do what we want!
   const maxColumns = 16;
@@ -33,9 +32,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
       ctp: '/starter-code/sounds/ctp.wav'
     }
   }
-
   const board = new Board(options);
-  startButton.addEventListener('click', board.init.bind(board));
+  board._drawBoard();
+  board._drawAccents()
+  document.getElementById('start').addEventListener('click', board.init.bind(board));
+  document.getElementById('high').addEventListener('click', board._selectInstrument.bind(board));
+  document.getElementById('base').addEventListener('click', board._selectInstrument.bind(board));
+  document.getElementById('ctp').addEventListener('click', board._selectInstrument.bind(board));
 })
 
 

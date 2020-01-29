@@ -13,8 +13,19 @@
   <div class="container" >
     <canvas id="rithm" ></canvas>
   </div>
-  <div class="button-container" >
-    <button id="start">start</button>
+  <div class="container start-container display-none" >
+    <h1>Rithm Game</h1>
+    <p>Press button to play</p>
+    <button id="start">play</button>
+  </div>
+  <div class="container select-container" >
+    <h1>Rithm Game</h1>
+    <p>Choose instrument</p>
+    <ul class="flex-row justify-content-around">
+      <li class="col-3"><button id="high">high</button></li>
+      <li class="col-3"><button id="base">base</button></li>
+      <li class="col-3"><button id="ctp">contratiempo</button></li>
+    </ul>
   </div>
   <script src="js/rithm.js"></script>
   <script src="js/timeline.js"></script>

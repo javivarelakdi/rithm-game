@@ -8,12 +8,13 @@ class Board {
     this.interval = undefined;
     this.soundsSrc = options.soundsSrc;
     this.mySounds = {};
+    this.instrument = undefined;
   }
 
   _drawBoard() {
     this.ctx.beginPath();
     this.ctx.lineWidth = "2";
-    this.ctx.strokeStyle = "black";
+    this.ctx.strokeStyle = "#aaa";
     for (var x = 0; x <= this.ctx.canvas.width; x += this.columnWidth) { 
       this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, this.ctx.canvas.height);
@@ -55,7 +56,11 @@ class Board {
   _crash(accentType){
     for (const propt in this.rithm.accents){
       this.rithm.accents[propt].forEach(accentPosition => {
-        if (propt === accentType && Math.ceil(this.columnWidth * accentPosition) === this.timeLine.position){
+        if (
+          propt === accentType && 
+          this.timeLine.position >= Math.ceil(this.columnWidth * accentPosition) &&
+          this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) 
+          ){
           console.log(this.timeLine.position)
           this._startPlayback(propt);
         }
@@ -68,36 +73,32 @@ class Board {
     this._drawBoard()
     this._drawAccents();
     this._drawTimeLine();
-    this._crash('high');
-    this._crash('base');
-    this._crash('ctp');
+    switch (this.instrument) {
+      case 'base':
+        this._crash('high');
+        this._crash('ctp');
+        break;
+      case 'ctp':
+        this._crash('high');
+        this._crash('base');
+        break;
+      default:
+        this._crash('ctp');
+        this._crash('base');
+    }
     if (!!this.interval) {
       this.interval = window.requestAnimationFrame(this._update.bind(this));
     }
   };
 
   _startPlayback(type) {
-    // const playPromise = this.mySounds[type].play;
-    // if (playPromise !== undefined) {
-    //   playPromise.then(_ => {
-    //     // Automatic playback started!
-    //     // Show playing UI.
-    //     // We can now safely pause video...
-    //     //this.mySounds[type].pause();
-    //   })
-    //   .catch(error => {
-    //     // Auto-play was prevented
-    //     // Show paused UI.
-    //   });
-    // }
-    // this.mySounds[type].play();
-    console.log("beep", type)
+    this.mySounds[type].play();
   }
   
   _assignControlsToKeys() {
     document.addEventListener('keydown', e => {
-      if(e.keyCode === 32){
-        this.mySounds.high.play();
+      if(e.keyCode === 81 || e.keyCode === 80){
+        this.mySounds[this.instrument].play();
       }
     });                 
   };
@@ -109,14 +110,23 @@ class Board {
   /*gameOver(){
 
   };*/
-  
+
+  _selectInstrument(e){
+    this.instrument = e.currentTarget.id;
+    document.querySelector('.select-container').classList.add('display-none');
+    document.querySelector('.start-container').classList.remove('display-none');
+  }
+
   init(){
-    this.interval = window.requestAnimationFrame(this._update.bind(this));
-    this.mySounds['high'] = this.rithm._createSoundElement(this.soundsSrc['high']);
-    this.mySounds['base'] = this.rithm._createSoundElement(this.soundsSrc['base']);
-    this.mySounds['ctp'] = this.rithm._createSoundElement(this.soundsSrc['ctp']);
-    this._assignControlsToKeys();
-    this._drawBoard();
-    this.timeLine._move();
+    if (this.interval === undefined){
+      this.interval = window.requestAnimationFrame(this._update.bind(this));
+      this.mySounds['high'] = this.rithm._createSoundElement(this.soundsSrc['high']);
+      this.mySounds['base'] = this.rithm._createSoundElement(this.soundsSrc['base']);
+      this.mySounds['ctp'] = this.rithm._createSoundElement(this.soundsSrc['ctp']);
+      this._assignControlsToKeys();
+      this._drawBoard();
+      this._drawAccents();
+      this.timeLine._move();
+    }
   };
 }
