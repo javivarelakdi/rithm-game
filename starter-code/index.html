@@ -18,13 +18,22 @@
     <p>Press button to play</p>
     <button id="start">play</button>
   </div>
-  <div class="container select-container" >
+  <div class="container select-container">
     <h1>Rithm Game</h1>
     <p>Choose instrument</p>
     <ul class="flex-row justify-content-around">
       <li class="col-3"><button id="high">high</button></li>
       <li class="col-3"><button id="base">base</button></li>
       <li class="col-3"><button id="ctp">contratiempo</button></li>
+    </ul>
+  </div>
+  <div class="container fail-container display-none">
+    <h1>Rithm Game</h1>
+    <p>You cannot fail more than 3 times</p>
+    <ul class="flex-row justify-content-around">
+      <li class="fail-1 fail fc-red col-3 display-none">X</li>
+      <li class="fail-2 fail fc-red col-3 display-none">X</li>
+      <li class="fail-3 fail fc-red col-3 display-none">X</li>
     </ul>
   </div>
   <script src="js/rithm.js"></script>

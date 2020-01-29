@@ -9,6 +9,7 @@ class Board {
     this.soundsSrc = options.soundsSrc;
     this.mySounds = {};
     this.instrument = undefined;
+    this.failCounter= 0;
   }
 
   _drawBoard() {
@@ -54,17 +55,18 @@ class Board {
   };
   
   _crash(accentType){
-    for (const propt in this.rithm.accents){
-      this.rithm.accents[propt].forEach(accentPosition => {
-        if (
-          propt === accentType && 
-          this.timeLine.position >= Math.ceil(this.columnWidth * accentPosition) &&
-          this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) 
-          ){
-          console.log(this.timeLine.position)
-          this._startPlayback(propt);
-        }
-      });
+    if (this.timeLine.intervalId){
+      for (const propt in this.rithm.accents){
+        this.rithm.accents[propt].forEach(accentPosition => {
+          if (
+            propt === accentType && 
+            this.timeLine.position >= Math.ceil(this.columnWidth * accentPosition) &&
+            this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) 
+            ){
+            this._startPlayback(propt);
+          }
+        });
+      }
     }
   }
 
@@ -99,17 +101,49 @@ class Board {
     document.addEventListener('keydown', e => {
       if(e.keyCode === 81 || e.keyCode === 80){
         this.mySounds[this.instrument].play();
+        this._checkIfMomentOk(this.timeLine.position, this.instrument);
       }
     });                 
   };
+
+  _checkIfMomentOk(tlPosition, instrument){
+    let flag=false;
+    for (const propt in this.rithm.accents){
+      if (propt === instrument){
+        this.rithm.accents[propt].forEach(accentPosition => {
+          if (
+            tlPosition >= Math.ceil(this.columnWidth * accentPosition) &&
+            tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
+            ){
+            flag=true;
+          }
+        });
+      }
+    }
+    if (flag === false){
+      this.failCounter < 3 ? this.failCounter++ : this._gameOver();
+      if (this.failCounter > 0 && this.failCounter < 3) {
+        document.querySelector(`.fail-container .fail-${this.failCounter}`).classList.remove('display-none');
+      }
+    }
+  }
 
   _clean(){
     this.ctx.clearRect(0,0,this.ctx.canvas.width,this.ctx.canvas.height);
   };
   
-  /*gameOver(){
-
-  };*/
+  _gameOver(){
+    this.timeLine._stop();
+    this.interval = undefined;
+    this.failCounter = 0;
+    document.querySelector('.fail-container').classList.add('display-none');
+    document.querySelector('.fail-1').classList.add('display-none');
+    document.querySelector('.fail-2').classList.add('display-none');
+    document.querySelector('.fail-3').classList.add('display-none');
+    document.querySelector('.select-container h1').innerText = "Game Over";
+    document.querySelector('.select-container p').innerText = "Try again with same or other instrument";
+    document.querySelector('.select-container').classList.remove('display-none');
+  };
 
   _selectInstrument(e){
     this.instrument = e.currentTarget.id;
@@ -119,6 +153,8 @@ class Board {
 
   init(){
     if (this.interval === undefined){
+      document.querySelector('.start-container').classList.add('display-none');
+      document.querySelector('.fail-container').classList.remove('display-none');
       this.interval = window.requestAnimationFrame(this._update.bind(this));
       this.mySounds['high'] = this.rithm._createSoundElement(this.soundsSrc['high']);
       this.mySounds['base'] = this.rithm._createSoundElement(this.soundsSrc['base']);

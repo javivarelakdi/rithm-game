@@ -10,4 +10,12 @@ class TimeLine {
       this.position=(this.position+1)%this.ctx.canvas.width;
     }.bind(this), 5);
   }
+
+  _stop(){
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = undefined;
+    }
+    this.position = 0;
+  }
 }
