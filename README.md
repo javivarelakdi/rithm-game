@@ -90,4 +90,4 @@ function Instrument(){
 [rithm game Trello](https://trello.com/b/rSxjIfLj/rithm-game)
 [Github](https://github.com/javivarelakdi/rithm-game)
 [Slides] (https://docs.google.com/presentation/d/1g5MQuKaLwajo-iptv96epxe3uQ-IjEgiDtn1i9VZu-E/edit?usp=sharing)
-[Github pages] https://github.com/javivarelakdi/rithm-game
+[Github pages] ( https://javivarelakdi.github.io/rithm-game/starter-code)
