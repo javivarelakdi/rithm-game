@@ -10,6 +10,16 @@ class Board {
     this.mySounds = {};
     this.instrument = undefined;
     this.failCounter= 0;
+    this.eventFire = 0;
+    this.drumHit= function(event){
+      this.eventFire++;
+      console.log(this.eventFire);
+      if(event.keyCode === 81 || event.keyCode === 80){
+        this.mySounds[this.instrument].play();
+        this._checkIfMomentOk(this.timeLine.position, this.instrument);
+      }
+    }
+    this.drumHitHandler = this.drumHit.bind(this);
   }
 
   _drawBoard() {
@@ -98,13 +108,14 @@ class Board {
   }
   
   _assignControlsToKeys() {
-    document.addEventListener('keydown', e => {
-      if(e.keyCode === 81 || e.keyCode === 80){
-        this.mySounds[this.instrument].play();
-        this._checkIfMomentOk(this.timeLine.position, this.instrument);
-      }
-    });                 
+    document.addEventListener('keydown', this.drumHitHandler);                 
   };
+
+  _removeAssignControlsToKeys() {
+    document.removeEventListener('keydown', this.drumHitHandler);                 
+  };
+
+  
 
   _checkIfMomentOk(tlPosition, instrument){
     let flag=false;
@@ -122,7 +133,7 @@ class Board {
     }
     if (flag === false){
       this.failCounter < 3 ? this.failCounter++ : this._gameOver();
-      if (this.failCounter > 0 && this.failCounter < 3) {
+      if (this.failCounter > 0 && this.failCounter <= 3) {
         document.querySelector(`.fail-container .fail-${this.failCounter}`).classList.remove('display-none');
       }
     }
@@ -136,6 +147,7 @@ class Board {
     this.timeLine._stop();
     this.interval = undefined;
     this.failCounter = 0;
+    this._removeAssignControlsToKeys();
     document.querySelector('.fail-container').classList.add('display-none');
     document.querySelector('.fail-1').classList.add('display-none');
     document.querySelector('.fail-2').classList.add('display-none');
