@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
       ctp: [6,13,14]
     },
     colors : {
-      high:'#B11E31',
-      base:'#F8AD1E',
-      ctp: '#166138'
+      high:'#d29803',
+      base:'#2F4D50',
+      ctp: 'green'
     }
   };
-  canvas.width = document.querySelector('.container').offsetWidth;
-  canvas.height = document.querySelector('.container').offsetHeight;
+  //canvas.width = document.querySelector('.container').offsetWidth;
+  //canvas.height = document.querySelector('.container').offsetHeight;
   const options = {
     ctx,
     columnWidth: canvas.width / maxColumns,

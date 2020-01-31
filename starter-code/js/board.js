@@ -11,15 +11,19 @@ class Board {
     this.instrument = undefined;
     this.failCounter= 0;
     this.eventFire = 0;
-    this.drumHit= function(event){
-      this.eventFire++;
-      console.log(this.eventFire);
+    this.drumHitDown= function(event){
       if(event.keyCode === 81 || event.keyCode === 80){
-        this.mySounds[this.instrument].play();
+        this._hitSoundDown(this.instrument);
         this._checkIfMomentOk(this.timeLine.position, this.instrument);
       }
     }
-    this.drumHitHandler = this.drumHit.bind(this);
+    this.drumHitUp= function(event){
+      if(event.keyCode === 81 || event.keyCode === 80){
+        this._hitSoundUp(this.instrument);
+      }
+    }
+    this.drumHitDownHandler = this.drumHitDown.bind(this);
+    this.drumHitUpHandler = this.drumHitUp.bind(this);
   }
 
   _drawBoard() {
@@ -73,7 +77,7 @@ class Board {
             this.timeLine.position >= Math.ceil(this.columnWidth * accentPosition) &&
             this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) 
             ){
-            this._startPlayback(propt);
+            this.mySounds[propt].play();
           }
         });
       }
@@ -103,16 +107,34 @@ class Board {
     }
   };
 
-  _startPlayback(type) {
+  _hitSoundDown(type) {
     this.mySounds[type].play();
+    const instr = document.querySelectorAll(`.${type}`);
+    for (let i = 0; i < instr.length; ++i) {
+      instr[i].classList.add('is-hit');
+      if (type === 'high') {
+        instr[i].classList.remove('cymbal-animation');
+        void instr[i].offsetWidth;
+        instr[i].classList.add('cymbal-animation');
+      }
+    }
+  }
+
+  _hitSoundUp(type){
+    const instr = document.querySelectorAll(`.${type}`);
+    for (let i = 0; i < instr.length; ++i) {
+      instr[i].classList.remove('is-hit');
+    }
   }
   
-  _assignControlsToKeys() {
-    document.addEventListener('keydown', this.drumHitHandler);                 
+  _assignEventListeners() {
+    document.addEventListener('keydown', this.drumHitDownHandler);  
+    document.addEventListener('keyup', this.drumHitUpHandler);                
   };
 
   _removeAssignControlsToKeys() {
-    document.removeEventListener('keydown', this.drumHitHandler);                 
+    document.removeEventListener('keydown', this.drumHitDownHandler);  
+    document.removeEventListener('keyup', this.drumHitUpHandler);                 
   };
 
   
@@ -148,6 +170,10 @@ class Board {
     this.interval = undefined;
     this.failCounter = 0;
     this._removeAssignControlsToKeys();
+    const hits = document.querySelectorAll('.is-hit');
+    for (let i = 0; i < hits.length; ++i) {
+      hits[i].classList.remove('is-hit');
+    }
     document.querySelector('.fail-container').classList.add('display-none');
     document.querySelector('.fail-1').classList.add('display-none');
     document.querySelector('.fail-2').classList.add('display-none');
@@ -171,7 +197,7 @@ class Board {
       this.mySounds['high'] = this.rithm._createSoundElement(this.soundsSrc['high']);
       this.mySounds['base'] = this.rithm._createSoundElement(this.soundsSrc['base']);
       this.mySounds['ctp'] = this.rithm._createSoundElement(this.soundsSrc['ctp']);
-      this._assignControlsToKeys();
+      this._assignEventListeners();
       this._drawBoard();
       this._drawAccents();
       this.timeLine._move();
