@@ -6,8 +6,6 @@ class Board {
     this.rithm = options.rithm;
     this.timeLine = options.timeLine;
     this.interval = undefined;
-    this.soundsSrc = options.soundsSrc;
-    this.mySounds = {};
     this.instrument = undefined;
     this.failCounter= 0;
     this.eventFire = 0;
@@ -17,13 +15,14 @@ class Board {
         this._checkIfMomentOk(this.timeLine.position, this.instrument);
       }
     }
+    this.drumHitDownHandler = this.drumHitDown.bind(this);
     this.drumHitUp= function(event){
       if(event.keyCode === 81 || event.keyCode === 80){
         this._hitSoundUp(this.instrument);
       }
     }
-    this.drumHitDownHandler = this.drumHitDown.bind(this);
     this.drumHitUpHandler = this.drumHitUp.bind(this);
+    this.crashFlag = 0;
   }
 
   _drawBoard() {
@@ -68,18 +67,48 @@ class Board {
     }
   };
   
-  _crash(accentType){
-    if (this.timeLine.intervalId){
+  _crash(instrument){
+    const audio = new Audio(soundsSrc[instrument]);
+    if (this.timeLine.intervalId && this.timeLine.position < this.ctx.canvas.width - this.columnWidth){
       for (const propt in this.rithm.accents){
+        if (propt === instrument){
+          this.rithm.accents[propt].forEach(accentPosition => {
+            if (
+              this.timeLine.position >= Math.ceil(this.columnWidth * (accentPosition)) &&
+              this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) &&
+              this.timeLine.position >= this.crashFlag
+              ){
+              this.crashFlag = this.timeLine.position + this.columnWidth +1;
+              audio.play();
+            }
+          });
+          
+        }
+      }
+    }
+    else {
+      this.crashFlag = 0;
+    }
+  }
+
+  _checkIfMomentOk(tlPosition, instrument){
+    let flag=false;
+    for (const propt in this.rithm.accents){
+      if (propt === instrument){
         this.rithm.accents[propt].forEach(accentPosition => {
           if (
-            propt === accentType && 
-            this.timeLine.position >= Math.ceil(this.columnWidth * accentPosition) &&
-            this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) 
+            tlPosition >= Math.ceil(this.columnWidth * accentPosition) &&
+            tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
             ){
-            this.mySounds[propt].play();
+            flag=true;
           }
         });
+      }
+    }
+    if (flag === false){
+      this.failCounter < 3 ? this.failCounter++ : this._gameOver();
+      if (this.failCounter > 0 && this.failCounter <= 3) {
+        document.querySelector(`.fail-container .fail-${this.failCounter}`).classList.remove('display-none');
       }
     }
   }
@@ -108,7 +137,8 @@ class Board {
   };
 
   _hitSoundDown(type) {
-    this.mySounds[type].play();
+    const audio = new Audio(soundsSrc[type]);
+    audio.play();
     const instr = document.querySelectorAll(`.${type}`);
     for (let i = 0; i < instr.length; ++i) {
       instr[i].classList.add('is-hit');
@@ -126,40 +156,8 @@ class Board {
       instr[i].classList.remove('is-hit');
     }
   }
-  
-  _assignEventListeners() {
-    document.addEventListener('keydown', this.drumHitDownHandler);  
-    document.addEventListener('keyup', this.drumHitUpHandler);                
-  };
-
-  _removeAssignControlsToKeys() {
-    document.removeEventListener('keydown', this.drumHitDownHandler);  
-    document.removeEventListener('keyup', this.drumHitUpHandler);                 
-  };
 
   
-
-  _checkIfMomentOk(tlPosition, instrument){
-    let flag=false;
-    for (const propt in this.rithm.accents){
-      if (propt === instrument){
-        this.rithm.accents[propt].forEach(accentPosition => {
-          if (
-            tlPosition >= Math.ceil(this.columnWidth * accentPosition) &&
-            tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
-            ){
-            flag=true;
-          }
-        });
-      }
-    }
-    if (flag === false){
-      this.failCounter < 3 ? this.failCounter++ : this._gameOver();
-      if (this.failCounter > 0 && this.failCounter <= 3) {
-        document.querySelector(`.fail-container .fail-${this.failCounter}`).classList.remove('display-none');
-      }
-    }
-  }
 
   _clean(){
     this.ctx.clearRect(0,0,this.ctx.canvas.width,this.ctx.canvas.height);
@@ -169,7 +167,8 @@ class Board {
     this.timeLine._stop();
     this.interval = undefined;
     this.failCounter = 0;
-    this._removeAssignControlsToKeys();
+    document.removeEventListener('keydown', this.drumHitDownHandler);  
+    document.removeEventListener('keyup', this.drumHitUpHandler); 
     const hits = document.querySelectorAll('.is-hit');
     for (let i = 0; i < hits.length; ++i) {
       hits[i].classList.remove('is-hit');
@@ -194,10 +193,8 @@ class Board {
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
       this.interval = window.requestAnimationFrame(this._update.bind(this));
-      this.mySounds['high'] = this.rithm._createSoundElement(this.soundsSrc['high']);
-      this.mySounds['base'] = this.rithm._createSoundElement(this.soundsSrc['base']);
-      this.mySounds['ctp'] = this.rithm._createSoundElement(this.soundsSrc['ctp']);
-      this._assignEventListeners();
+      document.addEventListener('keydown', this.drumHitDownHandler);  
+      document.addEventListener('keyup', this.drumHitUpHandler); 
       this._drawBoard();
       this._drawAccents();
       this.timeLine._move();
