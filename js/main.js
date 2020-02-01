@@ -1,9 +1,9 @@
 let canvas = document.getElementById('rithm')
 const ctx = canvas.getContext('2d');
 const soundsSrc = {
-  high:'/starter-code/sounds/high.wav',
-  base:'/starter-code/sounds/base.wav',
-  ctp: '/starter-code/sounds/ctp.wav'
+  high:'./sounds/high.wav',
+  base:'./sounds/base.wav',
+  ctp: './sounds/ctp.wav'
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
