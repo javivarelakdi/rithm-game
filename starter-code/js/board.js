@@ -78,7 +78,7 @@ class Board {
               this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) &&
               this.timeLine.position >= this.crashFlag
               ){
-              this.crashFlag = this.timeLine.position + this.columnWidth +1;
+              this.crashFlag = this.timeLine.position + this.columnWidth +2;
               audio.play();
             }
           });
