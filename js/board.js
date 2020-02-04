@@ -3,7 +3,7 @@ class Board {
     this.ctx = options.ctx;
     this.columnWidth= options.columnWidth;
     this.rowHeight= options.rowHeight;
-    this.rithm = options.rithm;
+    this.rhythm = new Rhythm();
     this.timeLine = options.timeLine;
     this.interval = undefined;
     this.instrument = undefined;
@@ -24,6 +24,7 @@ class Board {
     this.drumHitUpHandler = this.drumHitUp.bind(this);
     this.crashFlag = 0;
     this.points=0;
+    this.rhythmIndex=0;
   }
 
   _drawBoard() {
@@ -50,12 +51,12 @@ class Board {
   };
 
   _drawAccents(){
-    for (const proptAccents in this.rithm.accents){
-      for (const proptColors in this.rithm.colors){
+    for (const proptAccents in this.rhythm.accents[this.rhythmIndex]){
+      for (const proptColors in this.rhythm.colors){
         if ( proptColors === proptAccents){
-          this.ctx.fillStyle=this.rithm.colors[proptColors];
+          this.ctx.fillStyle=this.rhythm.colors[proptColors];
         }
-        this.rithm.accents[proptAccents].forEach(accentPosition => {
+        this.rhythm.accents[this.rhythmIndex][proptAccents].forEach(accentPosition => {
           const y = proptAccents === 'high'
             ? 0 
             : proptAccents === 'base'
@@ -71,9 +72,9 @@ class Board {
   _crash(instrument){
     const audio = new Audio(soundsSrc[instrument]);
     if (this.timeLine.intervalId && this.timeLine.position < this.ctx.canvas.width - this.columnWidth){
-      for (const propt in this.rithm.accents){
+      for (const propt in this.rhythm.accents[this.rhythmIndex]){
         if (propt === instrument){
-          this.rithm.accents[propt].forEach(accentPosition => {
+          this.rhythm.accents[this.rhythmIndex][propt].forEach(accentPosition => {
             if (
               this.timeLine.position >= Math.ceil(this.columnWidth * (accentPosition)) &&
               this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) &&
@@ -92,13 +93,11 @@ class Board {
     }
   }
 
-
-
   _checkIfMomentOk(tlPosition, instrument){
     let flag=false;
-    for (const propt in this.rithm.accents){
+    for (const propt in this.rhythm.accents[this.rhythmIndex]){
       if (propt === instrument){
-        this.rithm.accents[propt].forEach(accentPosition => {
+        this.rhythm.accents[this.rhythmIndex][propt].forEach(accentPosition => {
           if (
             tlPosition >= Math.ceil(this.columnWidth * accentPosition) &&
             tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
@@ -162,8 +161,6 @@ class Board {
     }
   }
 
-  
-
   _clean(){
     this.ctx.clearRect(0,0,this.ctx.canvas.width,this.ctx.canvas.height);
   };
@@ -177,7 +174,6 @@ class Board {
 
   _win(instrument){
     this._reset();
-    //cambia
     if (!accomplished.includes(instrument)) {accomplished.push(instrument)};
     let isRhythmDone = ['high','base','ctp'].every((val) => accomplished.includes(val));
     if (!isRhythmDone){
@@ -185,7 +181,18 @@ class Board {
       document.querySelector('.select-container p').innerText = "Try with remaining instruments";
       document.querySelector(`.select-container #${instrument}`).disabled = true;
     } else {
-      
+      this.rhythmIndex = this.rhythmIndex < this.rhythm.accents.length 
+        ? this.rhythmIndex+1 
+        : 0;
+      this._clean();
+      this._drawBoard()
+      this._drawAccents();
+      const disabledButtons = document.querySelectorAll('.select-container button');
+      for (let i = 0; i < disabledButtons.length; ++i) {
+        disabledButtons[i].disabled=false;
+      }
+      document.querySelector('.select-container h1').innerText = "Play this new rhythm";
+      document.querySelector('.select-container p').innerText = "Try again with all the instruments";
     }
     document.querySelector('.select-container').classList.remove('display-none');
   }
