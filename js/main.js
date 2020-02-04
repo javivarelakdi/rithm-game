@@ -5,7 +5,7 @@ const soundsSrc = {
   base:'./sounds/base.wav',
   ctp: './sounds/ctp.wav'
 }
-
+const accomplished = [];
 document.addEventListener('DOMContentLoaded', (event) => {
   //the DOM is ready, we can do what we want!
   const maxColumns = 16;
@@ -17,11 +17,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
       high: [0,3,7,10,12],
       base: [0,4,8,12],
       ctp: [6,13,14]
-    },
-    colors : {
-      high:'#d29803',
-      base:'#2F4D50',
-      ctp: 'green'
+    }
+  };
+  const sambaDuro = {
+    ctx,
+    name: 'samba duro',
+    accents: {
+      high: [1,3,6,8,11,14],
+      base: [0,4,8,12],
+      ctp: [5,7,13,15]
+    }
+  };
+  const reggae = {
+    ctx,
+    name: 'reggae',
+    accents: {
+      high: [2,3,6,9,10,11,14],
+      base: [0,4,8,12],
+      ctp: [0,3,6,8,11,14]
     }
   };
   //canvas.width = document.querySelector('.container').offsetWidth;
@@ -47,7 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     columnWidth: canvas.width / maxColumns,
     rowHeight: canvas.height / maxRows,
     timeLine: new TimeLine(ctx),
-    rithm: new Rithm(sambaReagge)
+    rithm: new Rithm(reggae)
   }
   const board = new Board(options);
   board._drawBoard();

@@ -23,6 +23,7 @@ class Board {
     }
     this.drumHitUpHandler = this.drumHitUp.bind(this);
     this.crashFlag = 0;
+    this.points=0;
   }
 
   _drawBoard() {
@@ -78,7 +79,7 @@ class Board {
               this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) &&
               this.timeLine.position >= this.crashFlag
               ){
-              this.crashFlag = this.timeLine.position + this.columnWidth +2;
+              this.crashFlag = this.timeLine.position + this.columnWidth;
               audio.play();
             }
           });
@@ -91,6 +92,8 @@ class Board {
     }
   }
 
+
+
   _checkIfMomentOk(tlPosition, instrument){
     let flag=false;
     for (const propt in this.rithm.accents){
@@ -101,6 +104,8 @@ class Board {
             tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
             ){
             flag=true;
+            this.points < 50 ? this.points+=10 : this._win(instrument);
+            console.log(this.points);
           }
         });
       }
@@ -164,23 +169,43 @@ class Board {
   };
   
   _gameOver(){
+    this._reset();
+    document.querySelector('.select-container h1').innerText = "Game Over";
+    document.querySelector('.select-container p').innerText = "Try again with same or other instrument";
+    document.querySelector('.select-container').classList.remove('display-none');
+  };
+
+  _win(instrument){
+    this._reset();
+    //cambia
+    if (!accomplished.includes(instrument)) {accomplished.push(instrument)};
+    let isRhythmDone = ['high','base','ctp'].every((val) => accomplished.includes(val));
+    if (!isRhythmDone){
+      document.querySelector('.select-container h1').innerText = `You got the ${instrument} groove`;
+      document.querySelector('.select-container p').innerText = "Try with remaining instruments";
+      document.querySelector(`.select-container #${instrument}`).disabled = true;
+    } else {
+      
+    }
+    document.querySelector('.select-container').classList.remove('display-none');
+  }
+
+  _reset(){
     this.timeLine._stop();
     this.interval = undefined;
     this.failCounter = 0;
+    this.points=0;
+    document.querySelector('.fail-container').classList.add('display-none');
+    document.querySelector('.fail-1').classList.add('display-none');
+    document.querySelector('.fail-2').classList.add('display-none');
+    document.querySelector('.fail-3').classList.add('display-none');
     document.removeEventListener('keydown', this.drumHitDownHandler);  
     document.removeEventListener('keyup', this.drumHitUpHandler); 
     const hits = document.querySelectorAll('.is-hit');
     for (let i = 0; i < hits.length; ++i) {
       hits[i].classList.remove('is-hit');
     }
-    document.querySelector('.fail-container').classList.add('display-none');
-    document.querySelector('.fail-1').classList.add('display-none');
-    document.querySelector('.fail-2').classList.add('display-none');
-    document.querySelector('.fail-3').classList.add('display-none');
-    document.querySelector('.select-container h1').innerText = "Game Over";
-    document.querySelector('.select-container p').innerText = "Try again with same or other instrument";
-    document.querySelector('.select-container').classList.remove('display-none');
-  };
+  }
 
   _selectInstrument(e){
     this.instrument = e.currentTarget.id;
