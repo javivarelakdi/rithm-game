@@ -5,7 +5,8 @@ const soundsSrc = {
   base:'./sounds/base.wav',
   ctp: './sounds/ctp.wav'
 }
-const accomplished = [];
+const confNum = Math.floor(w / 4);
+const confs = new Array(confNum).fill().map(_ => new Confetti());
 document.addEventListener('DOMContentLoaded', (event) => {
   //the DOM is ready, we can do what we want!
   const maxColumns = 16;

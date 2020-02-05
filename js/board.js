@@ -25,6 +25,7 @@ class Board {
     this.crashFlag = 0;
     this.points=0;
     this.rhythmIndex=0;
+    this.accomplished=[];
   }
 
   _drawBoard() {
@@ -80,7 +81,7 @@ class Board {
               this.timeLine.position <= Math.ceil(this.columnWidth * (accentPosition+1)) &&
               this.timeLine.position >= this.crashFlag
               ){
-              this.crashFlag = this.timeLine.position + this.columnWidth;
+              this.crashFlag = this.timeLine.position + this.columnWidth+2;
               audio.play();
             }
           });
@@ -174,16 +175,17 @@ class Board {
 
   _win(instrument){
     this._reset();
-    if (!accomplished.includes(instrument)) {accomplished.push(instrument)};
-    let isRhythmDone = ['high','base','ctp'].every((val) => accomplished.includes(val));
+    if (!this.accomplished.includes(instrument)) {this.accomplished.push(instrument)};
+    let isRhythmDone = ['high','base','ctp'].every((val) => this.accomplished.includes(val));
     if (!isRhythmDone){
       document.querySelector('.select-container h1').innerText = `You got the ${instrument} groove`;
       document.querySelector('.select-container p').innerText = "Try with remaining instruments";
       document.querySelector(`.select-container #${instrument}`).disabled = true;
     } else {
-      this.rhythmIndex = this.rhythmIndex < this.rhythm.accents.length 
+      this.rhythmIndex = this.rhythmIndex < this.rhythm.accents.length - 1 
         ? this.rhythmIndex+1 
         : 0;
+      this.accomplished=[];
       this._clean();
       this._drawBoard()
       this._drawAccents();
