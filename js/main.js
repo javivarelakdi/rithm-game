@@ -3,7 +3,8 @@ const ctx = canvas.getContext('2d');
 const soundsSrc = {
   high:'./sounds/high.wav',
   base:'./sounds/base.wav',
-  ctp: './sounds/ctp.wav'
+  ctp: './sounds/ctp.wav',
+  aplause: './sounds/aplause.wav',
 }
 const accomplished = [];
 document.addEventListener('DOMContentLoaded', (event) => {

@@ -177,6 +177,7 @@ class Board {
   };
 
   _win(instrument){
+    const aplause = new Audio(soundsSrc['aplause']);
     this._reset();
     if (!this.accomplished.includes(instrument)) {this.accomplished.push(instrument)};
     let isRhythmDone = ['high','base','ctp'].every((val) => this.accomplished.includes(val));
@@ -198,7 +199,9 @@ class Board {
       }
       document.querySelector('.select-container h1').innerText = "Play this new rhythm";
       document.querySelector('.select-container p').innerText = "Try again with all the instruments";
-      confettiLoop(this.confettiInterval);
+      confettiInterval = 1;
+      confettiLoop();
+      aplause.play();
     }
     document.querySelector('.select-container').classList.remove('display-none');
     
@@ -229,7 +232,8 @@ class Board {
 
   init(){
     if (this.interval === undefined){
-      clearConfetti(this.confettiInterval)
+      confettiInterval = undefined;
+      clearConfetti()
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
       this.interval = window.requestAnimationFrame(this._update.bind(this));

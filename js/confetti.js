@@ -2,9 +2,10 @@ const canvasEl = document.querySelector('#confetti');
 
 const w = canvasEl.clientWidth;
 const h = canvasEl.height = window.innerHeight;
+let confettiInterval = undefined;
 
 function confettiLoop() {
-  requestAnimationFrame(confettiLoop);
+  if (confettiInterval) {confettiInterval = requestAnimationFrame(confettiLoop);}
 	canvasCtx.clearRect(0,0,w,h);
   confs.forEach((conf) => {
     conf.update();
@@ -13,6 +14,7 @@ function confettiLoop() {
 }
 
 function clearConfetti(){
+  confettiInterval = undefined;
   canvasCtx.clearRect(0,0,w,h);
 }
 
