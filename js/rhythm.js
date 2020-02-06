@@ -1,5 +1,10 @@
 class Rhythm {
   constructor() {
+    this.names = [
+      "SAMBA REGGAE",
+      "SAMBA DURO",
+      "REGGAE"
+    ]
     this.accents = [
       {high:[0,3,7,10,12],base:[0,4,8,12],ctp:[6,13,14]},
       {high:[1,3,6,8,11,14],base: [0,4,8,12],ctp: [5,7,13,15]},
@@ -8,7 +13,7 @@ class Rhythm {
     this.colors = {
       high:'#d29803',
       base:'#2F4D50',
-      ctp: 'green'
+      ctp: '#ed564b'
     }
   }
 }

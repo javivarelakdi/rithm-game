@@ -5,16 +5,19 @@ const h = canvasEl.height = window.innerHeight;
 let confettiInterval = undefined;
 
 function confettiLoop() {
-  if (confettiInterval) {confettiInterval = requestAnimationFrame(confettiLoop);}
-	canvasCtx.clearRect(0,0,w,h);
-  confs.forEach((conf) => {
-    conf.update();
-    conf.draw();
-  })
+  if (confettiInterval) {
+    confettiInterval = requestAnimationFrame(confettiLoop);
+    canvasCtx.clearRect(0,0,w,h);
+    confs.forEach((conf) => {
+      conf.update();
+      conf.draw();
+    })
+  }
 }
 
 function clearConfetti(){
   confettiInterval = undefined;
+  confs = new Array(confNum).fill().map(_ => new Confetti());
   canvasCtx.clearRect(0,0,w,h);
 }
 
@@ -67,4 +70,4 @@ Confetti.prototype.draw = function() {
 
 const canvasCtx = canvasEl.getContext('2d');
 const confNum = Math.floor(w / 4);
-const confs = new Array(confNum).fill().map(_ => new Confetti());
+let confs = new Array(confNum).fill().map(_ => new Confetti());

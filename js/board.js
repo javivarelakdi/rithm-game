@@ -197,7 +197,7 @@ class Board {
       for (let i = 0; i < disabledButtons.length; ++i) {
         disabledButtons[i].disabled=false;
       }
-      document.querySelector('.select-container h1').innerText = "Play this new rhythm";
+      document.querySelector('.select-container h1').innerText = `Now you are playing ${this.rhythm.names[this.rhythmIndex]}`
       document.querySelector('.select-container p').innerText = "Try again with all the instruments";
       confettiInterval = 1;
       confettiLoop();
@@ -236,6 +236,7 @@ class Board {
       clearConfetti()
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
+      document.querySelector('.fail-container h1').innerText = `You are playing ${this.instrument}`;
       this.interval = window.requestAnimationFrame(this._update.bind(this));
       document.addEventListener('keydown', this.drumHitDownHandler);  
       document.addEventListener('keyup', this.drumHitUpHandler); 

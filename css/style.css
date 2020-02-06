@@ -21,8 +21,8 @@ button:disabled{
 h1{font-size: 2rem;}
 h2{font-size: 1.5rem;}
 h3{font-size: 1rem;}
-p{font-size: 0.875rem; color: #aaa;}
-i{font-size: 3rem;}
+p{font-size: 1.5rem; color: #ed564b;}
+i{font-size: 3rem; color: #ed564b;}
 body{font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;} 
 .container {
     margin: 0 auto;
@@ -208,7 +208,7 @@ body{font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
 }
 
 .is-hit, .is-hit::after {
-    background: green;
+    background: #ed564b;
 }
 
 .bass-drum.is-hit {
