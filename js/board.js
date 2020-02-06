@@ -69,6 +69,8 @@ class Board {
       }
     }
   };
+
+  
   
   _crash(instrument){
     const audio = new Audio(soundsSrc[instrument]);
@@ -195,8 +197,10 @@ class Board {
       }
       document.querySelector('.select-container h1').innerText = "Play this new rhythm";
       document.querySelector('.select-container p').innerText = "Try again with all the instruments";
+      confettiLoop();
     }
     document.querySelector('.select-container').classList.remove('display-none');
+    
   }
 
   _reset(){
@@ -224,6 +228,7 @@ class Board {
 
   init(){
     if (this.interval === undefined){
+      clearConfetti()
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
       this.interval = window.requestAnimationFrame(this._update.bind(this));

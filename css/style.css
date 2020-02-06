@@ -223,4 +223,10 @@ body{font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
     50% {transform: skew(-10deg)};
 }
 
+.container-confetti{
+    position: absolute;
+    top: 0;
+    z-index: -10;
+}
+
 
