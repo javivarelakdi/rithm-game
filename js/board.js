@@ -107,8 +107,8 @@ class Board {
             tlPosition <= Math.ceil(this.columnWidth * (accentPosition+1))
             ){
             flag=true;
-            this.points < 50 ? this.points+=10 : this._win(instrument);
-            console.log(this.points);
+            this.points < 100 ? this.points+=10 : this._win(instrument);
+            document.querySelector('.score-container h1').innerText = this.points
           }
         });
       }
@@ -185,6 +185,7 @@ class Board {
       document.querySelector('.select-container h1').innerText = `You got the ${instrument} groove`;
       document.querySelector('.select-container p').innerText = "Try with remaining instruments";
       document.querySelector(`.select-container #${instrument}`).disabled = true;
+      document.querySelector('.score-container').classList.add('display-none');
     } else {
       this.rhythmIndex = this.rhythmIndex < this.rhythm.accents.length - 1 
         ? this.rhythmIndex+1 
@@ -197,8 +198,9 @@ class Board {
       for (let i = 0; i < disabledButtons.length; ++i) {
         disabledButtons[i].disabled=false;
       }
-      document.querySelector('.select-container h1').innerText = `Now you are playing ${this.rhythm.names[this.rhythmIndex]}`
+      document.querySelector('.select-container h1').innerText = `Now you gunna play ${this.rhythm.names[this.rhythmIndex]}`
       document.querySelector('.select-container p').innerText = "Try again with all the instruments";
+      document.querySelector('.score-container').classList.add('display-none');
       confettiInterval = 1;
       confettiLoop();
       aplause.play();
@@ -236,7 +238,9 @@ class Board {
       clearConfetti()
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
-      document.querySelector('.fail-container h1').innerText = `You are playing ${this.instrument}`;
+      document.querySelector('.fail-container h1').innerText = `You are playing ${this.instrument} tunes`;
+      document.querySelector('.score-container').classList.remove('display-none');
+      document.querySelector('.score-container h1').innerText = "0";
       this.interval = window.requestAnimationFrame(this._update.bind(this));
       document.addEventListener('keydown', this.drumHitDownHandler);  
       document.addEventListener('keyup', this.drumHitUpHandler); 
