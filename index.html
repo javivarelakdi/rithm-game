@@ -31,13 +31,13 @@
     <canvas id="rhythm" width="800" height="200"></canvas>
   </div>
   <div class="container start-container display-none" >
-    <h1>You are playing SAMBA REGGAE</h1>
-    <p>Press button to play</p>
+    <p class="title">You are playing SAMBA REGGAE</p>
+    <p class="content">Press button to play</p>
     <button id="start">play</button>
   </div>
   <div class="container select-container">
-    <h1>Rhythm Game</h1>
-    <p>Choose instrument</p>
+    <p class="title">Rhythm Game</p>
+    <p class="content">Choose instrument</p>
     <ul class="flex-row justify-content-center">
       <li class="col-3"><button id="high">high</button></li>
       <li class="col-3"><button id="base">base</button></li>
@@ -45,9 +45,9 @@
     </ul>
   </div>
   <div class="container fail-container display-none">
-    <h1>Rythm Game</h1>
-    <p>You cannot fail more than 3 times</p>
-    <p>Reach 100 points to get this instrument done</p>
+    <p class="title">Rythm Game</p>
+    <p class="content">You cannot fail more than 3 times</p>
+    <p class="content">Reach 100 points to get this instrument done</p>
     <ul class="flex-row justify-content-center">
       <li class="fail-1 fail fc-red col-3 display-none"><i class="fas fa-skull"></i></li>
       <li class="fail-2 fail fc-red col-3 display-none"><i class="fas fa-skull"></i></li>
@@ -55,7 +55,7 @@
     </ul>
   </div>
   <div class="container score-container display-none">
-    <h1>0</h1>
+    <p class="title">0</p>
   </div>
   <script src="js/rhythm.js"></script>
   <script src="js/timeline.js"></script>

@@ -108,7 +108,7 @@ class Board {
             ){
             flag=true;
             this.points < 100 ? this.points+=10 : this._win(instrument);
-            document.querySelector('.score-container h1').innerText = this.points
+            document.querySelector('.score-container .title').innerText = this.points
           }
         });
       }
@@ -171,8 +171,8 @@ class Board {
   
   _gameOver(){
     this._reset();
-    document.querySelector('.select-container h1').innerText = "Game Over";
-    document.querySelector('.select-container p').innerText = "Try again with same or other instrument";
+    document.querySelector('.select-container .title').innerText = "Game Over";
+    document.querySelector('.select-container .content').innerText = "Try again with same or other instrument";
     document.querySelector('.select-container').classList.remove('display-none');
   };
 
@@ -182,10 +182,9 @@ class Board {
     if (!this.accomplished.includes(instrument)) {this.accomplished.push(instrument)};
     let isRhythmDone = ['high','base','ctp'].every((val) => this.accomplished.includes(val));
     if (!isRhythmDone){
-      document.querySelector('.select-container h1').innerText = `You got the ${instrument} groove`;
-      document.querySelector('.select-container p').innerText = "Try with remaining instruments";
+      document.querySelector('.select-container .title').innerText = `You got the ${instrument} groove`;
+      document.querySelector('.select-container .content').innerText = "Try with remaining instruments";
       document.querySelector(`.select-container #${instrument}`).disabled = true;
-      document.querySelector('.score-container').classList.add('display-none');
     } else {
       this.rhythmIndex = this.rhythmIndex < this.rhythm.accents.length - 1 
         ? this.rhythmIndex+1 
@@ -198,9 +197,8 @@ class Board {
       for (let i = 0; i < disabledButtons.length; ++i) {
         disabledButtons[i].disabled=false;
       }
-      document.querySelector('.select-container h1').innerText = `Now you gunna play ${this.rhythm.names[this.rhythmIndex]}`
-      document.querySelector('.select-container p').innerText = "Try again with all the instruments";
-      document.querySelector('.score-container').classList.add('display-none');
+      document.querySelector('.select-container .title').innerText = `Now you gunna play ${this.rhythm.names[this.rhythmIndex]}`
+      document.querySelector('.select-container .content').innerText = "Try again with all the instruments";
       confettiInterval = 1;
       confettiLoop();
       aplause.play();
@@ -220,6 +218,7 @@ class Board {
     document.querySelector('.fail-3').classList.add('display-none');
     document.removeEventListener('keydown', this.drumHitDownHandler);  
     document.removeEventListener('keyup', this.drumHitUpHandler); 
+    document.querySelector('.score-container').classList.add('display-none');
     const hits = document.querySelectorAll('.is-hit');
     for (let i = 0; i < hits.length; ++i) {
       hits[i].classList.remove('is-hit');
@@ -238,9 +237,9 @@ class Board {
       clearConfetti()
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
-      document.querySelector('.fail-container h1').innerText = `You are playing ${this.instrument} tunes`;
+      document.querySelector('.fail-container .title').innerText = `You are playing ${this.instrument} tunes`;
       document.querySelector('.score-container').classList.remove('display-none');
-      document.querySelector('.score-container h1').innerText = "0";
+      document.querySelector('.score-container .title').innerText = "0";
       this.interval = window.requestAnimationFrame(this._update.bind(this));
       document.addEventListener('keydown', this.drumHitDownHandler);  
       document.addEventListener('keyup', this.drumHitUpHandler); 
