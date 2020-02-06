@@ -26,6 +26,7 @@ class Board {
     this.points=0;
     this.rhythmIndex=0;
     this.accomplished=[];
+    this.confettiInterval=undefined;
   }
 
   _drawBoard() {
@@ -197,7 +198,7 @@ class Board {
       }
       document.querySelector('.select-container h1').innerText = "Play this new rhythm";
       document.querySelector('.select-container p').innerText = "Try again with all the instruments";
-      confettiLoop();
+      confettiLoop(this.confettiInterval);
     }
     document.querySelector('.select-container').classList.remove('display-none');
     
@@ -228,7 +229,7 @@ class Board {
 
   init(){
     if (this.interval === undefined){
-      clearConfetti()
+      clearConfetti(this.confettiInterval)
       document.querySelector('.start-container').classList.add('display-none');
       document.querySelector('.fail-container').classList.remove('display-none');
       this.interval = window.requestAnimationFrame(this._update.bind(this));

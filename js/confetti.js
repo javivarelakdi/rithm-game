@@ -6,7 +6,6 @@ const h = canvasEl.height = window.innerHeight;
 function confettiLoop() {
   requestAnimationFrame(confettiLoop);
 	canvasCtx.clearRect(0,0,w,h);
-  
   confs.forEach((conf) => {
     conf.update();
     conf.draw();
